@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(az account show:*)",
+      "Bash(az webapp list:*)",
+      "Bash(az webapp show:*)",
+      "Bash(az webapp log tail:*)",
+      "Bash(az appservice plan list:*)",
+      "Bash(az containerapp show:*)",
+      "Bash(az containerapp env show:*)",
+      "Bash(az resource list:*)",
+      "Bash(az storage account show:*)",
+      "Bash(temporal workflow count:*)",
+      "Bash(temporal workflow list:*)",
+      "Bash(temporal workflow describe:*)",
+      "Bash(temporal task-queue describe:*)",
+      "Bash(temporal operator namespace describe:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet publish:*)",
+      "Bash(dotnet restore:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(docker compose ps:*)",
+      "Bash(docker compose logs:*)"
+    ],
+    "deny": [
+      "Read(./certs/**)",
+      "Read(./config/testconfig.json)",
+      "Bash(cat ./certs/**)",
+      "Bash(cat ./config/testconfig.json)",
+      "Bash(base64 ./certs/**)",
+      "Bash(head ./certs/**)",
+      "Bash(tail ./certs/**)",
+      "Bash(grep * ./certs/**)",
+      "Bash(cp ./certs/**)"
+    ]
+  }
+}

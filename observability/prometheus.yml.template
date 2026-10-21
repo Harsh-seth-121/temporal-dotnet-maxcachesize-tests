@@ -1,0 +1,33 @@
+# TEMPLATE. ./deploy/setup.sh renders this into prometheus.yml with your own prefix.
+# Edit this file, not the rendered one: a re-run of setup overwrites prometheus.yml.
+# One worker app, reconfigured between arms. The arm is carried by the `arm` label that the
+# SDK runtime's GlobalTags already sets, NOT by the hostname. Leaving four per-arm targets
+# configured here would leave three permanently down and the dashboard would show gaps that
+# look like worker failures.
+global:
+  # GC pauses under eviction churn exceed 20s, so a 10s timeout records up=0 for a worker
+  # that is alive and merely slow. Timeout must stay <= interval.
+  scrape_interval: 30s
+  scrape_timeout: 28s
+  external_labels:
+    experiment: oom-cache-sizing
+
+scrape_configs:
+  - job_name: temporal-worker
+    scheme: https
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /etc/prometheus/secrets/metrics_token
+    static_configs:
+__WORKER_TARGETS__
+
+  # CPU, GC detail and the cgroup ceiling. Separate job because it is a separate endpoint.
+  - job_name: temporal-worker-runtime
+    scheme: https
+    metrics_path: /metrics/runtime
+    authorization:
+      type: Bearer
+      credentials_file: /etc/prometheus/secrets/metrics_token
+    static_configs:
+__WORKER_TARGETS__

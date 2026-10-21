@@ -1,0 +1,47 @@
+# TEMPLATE. ./deploy/setup.sh renders this into docker-compose.yml with your own
+# prefix. Edit this file, not the rendered one: a re-run of setup overwrites it.
+# Local observability for the cache test.
+#
+# Azure Container Apps wedged its environment in Waiting, and Microsoft.ContainerInstance
+# cannot be registered by this principal, so the stack runs here instead. It loses nothing:
+# the worker /metrics endpoints are public HTTPS with bearer auth, so scraping them from a
+# laptop and scraping them from inside Azure see exactly the same data.
+name: __PREFIX__
+
+services:
+  prometheus:
+    image: prom/prometheus:v3.6.0
+    container_name: __PREFIX__-prom
+    ports: ["127.0.0.1:9090:9090"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./secrets:/etc/prometheus/secrets:ro
+      - prom-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:12.2.0
+    container_name: __PREFIX__-grafana
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on: [prometheus]
+    environment:
+      # Anonymous admin is only acceptable because the port above is bound to 127.0.0.1.
+      # A bare "3000:3000" publishes on 0.0.0.0 and would hand admin Grafana to anyone on
+      # the local network. Keep the loopback prefix if you change this.
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_USERS_DEFAULT_THEME: "dark"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  prom-data:
+  grafana-data:

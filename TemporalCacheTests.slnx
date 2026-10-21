@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CacheTest.Core/CacheTest.Core.csproj" />
+    <Project Path="src/CacheTest.Driver/CacheTest.Driver.csproj" />
+    <Project Path="src/CacheTest.Worker/CacheTest.Worker.csproj" />
+  </Folder>
+</Solution>

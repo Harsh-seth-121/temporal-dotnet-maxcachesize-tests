@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CacheTest.Core\CacheTest.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Ship config with the build so the published zip is self-sufficient on App Service.
+       testconfig.json is gitignored; when absent only the sample is copied. -->
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)/../../config/*.json"
+          Link="config/%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

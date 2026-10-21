@@ -1,0 +1,19 @@
+{
+  "setup": {
+    "version": 1,
+    "completed": [],
+    "updated": ""
+  },
+  "azure": {
+    "subscriptionId": "",
+    "resourceGroup": "",
+    "location": "eastus2",
+    "prefix": "temporal-cache-test",
+    "workerSku": "P1V3",
+    "driverSku": "P1V3",
+    "runtime": "DOTNETCORE:10.0",
+    "workers": 6,
+    "storageAccount": "",
+    "deployStorage": ""
+  }
+}

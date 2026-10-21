@@ -1,0 +1,89 @@
+{
+  "temporal": {
+    "address": "<namespace>.<account>.tmprl.cloud:7233",
+    "namespace": "<namespace>.<account>",
+    "clientCertPath": "certs/client.pem",
+    "clientKeyPath": "certs/client.key",
+    "apsLimit": 500
+  },
+  "arms": [
+    {
+      "name": "c10000",
+      "taskQueue": "<prefix>-c10000",
+      "maxCachedWorkflows": 10000
+    },
+    {
+      "name": "c8000",
+      "taskQueue": "<prefix>-c8000",
+      "maxCachedWorkflows": 8000
+    },
+    {
+      "name": "c6000",
+      "taskQueue": "<prefix>-c6000",
+      "maxCachedWorkflows": 6000
+    },
+    {
+      "name": "c10000-nolimit",
+      "taskQueue": "<prefix>-c10000-nolimit",
+      "maxCachedWorkflows": 10000
+    },
+    {
+      "name": "c8000-nolimit",
+      "taskQueue": "<prefix>-c8000-nolimit",
+      "maxCachedWorkflows": 8000
+    },
+    {
+      "name": "c6000-nolimit",
+      "taskQueue": "<prefix>-c6000-nolimit",
+      "maxCachedWorkflows": 6000
+    }
+  ],
+  "worker": {
+    "maxConcurrentWorkflowTasks": 200,
+    "maxConcurrentActivities": 100,
+    "maxConcurrentWorkflowTaskPolls": 10
+  },
+  "profile": "smoke",
+  "profiles": {
+    "ramp": {
+      "kind": "ramp",
+      "targetOpenPerQueue": 10500,
+      "startRatePerSecond": 12.5,
+      "heartbeatIntervalSeconds": 300,
+      "haltOnDivergence": false
+    },
+    "smoke": {
+      "kind": "ramp",
+      "targetOpenPerQueue": 400,
+      "startRatePerSecond": 5,
+      "heartbeatIntervalSeconds": 60,
+      "haltOnDivergence": false
+    },
+    "burst": {
+      "kind": "burst",
+      "startsPerMinute": 2000,
+      "durationMinutes": 30
+    },
+    "oom": {
+      "kind": "ramp",
+      "targetOpenPerQueue": 10000,
+      "startRatePerSecond": 12.5,
+      "heartbeatIntervalSeconds": 300,
+      "haltOnDivergence": false,
+      "batchCount": 13,
+      "bytesPerBatch": 40960,
+      "holdMinutes": 75,
+      "drainAfterHold": true
+    },
+    "calibrate": {
+      "kind": "ramp",
+      "targetOpenPerQueue": 500,
+      "startRatePerSecond": 10,
+      "heartbeatIntervalSeconds": 300,
+      "haltOnDivergence": false,
+      "batchCount": 9,
+      "bytesPerBatch": 40960,
+      "holdMinutes": 10
+    }
+  }
+}
